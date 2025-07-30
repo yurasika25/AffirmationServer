@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Affirmation(
     val id: Int,
-    val message: String
+    val text: String
 )
