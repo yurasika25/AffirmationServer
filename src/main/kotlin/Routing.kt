@@ -19,16 +19,24 @@ fun Application.configureRouting() {
             }
         }
 
-        get("/") {
-            call.respondText("Server is running")
+        get("user/profile") {
+            val data = UserProfile(
+                "Yurii",
+                "Sika",
+                28,
+                "Male",
+                "+380967927303",
+                "yrasika80@gmail.com")
+
+            call.respond(data)
         }
 
         get("affirmation/details") {
             call.respondText("Every day is a new opportunity to grow.")
         }
 
-        get("user/profile") {
-            call.respondText("User user 001")
+        get("user/status") {
+            call.respondText("Enabled")
         }
 
         get("affirmations") {

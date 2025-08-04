@@ -18,6 +18,15 @@ application {
 repositories {
     mavenCentral()
 }
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = application.mainClass.get()
+    }
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 
 dependencies {
     implementation("io.ktor:ktor-server-core:$ktor_version")
