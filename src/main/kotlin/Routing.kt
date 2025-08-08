@@ -1,21 +1,59 @@
 package com.app
 
-import com.app.data.AffirmationData
-import com.app.data.NotificationData
+import com.app.data.AffirmationModel
+import com.app.data.NotificationModel
+import com.app.data.PostData
+import com.app.data.UserProfileModel
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
+import io.ktor.server.request.receive
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import java.io.File
 
 fun Application.configureRouting() {
     routing {
+        get("user/details") {
+            val file = File("data.txt")
+            if (!file.exists()) {
+                call.respond(HttpStatusCode.NotFound, "No data found")
+                return@get
+            }
+
+            val lines = file.readLines()
+
+            val posts = lines.mapNotNull { line ->
+                val regex = """Name: (.*), Message: (.*)""".toRegex()
+                val matchResult = regex.matchEntire(line)
+                matchResult?.let {
+                    val (name, message) = it.destructured
+                    PostData(name, message)
+                }
+            }
+
+            call.respond(posts)
+        }
+
+        put("user/profile/update") {
+            val postData = call.receive<UserProfileModel>()
+
+            val file = File("data.txt")
+            file.appendText(
+                "FirstName: ${postData.firstName}, " +
+                        "LastName: ${postData.lastName}, " +
+                        "Age: ${postData.age}, " +
+                        "Gender: ${postData.gender}, " +
+                        "Phone: ${postData.phoneNumber}, " +
+                        "Email: ${postData.email}\n"
+            )
+            call.respond(HttpStatusCode.Created, "Data received and saved")
+        }
 
         get("/") {
             call.respondText("Server is running!")
         }
 
-        get("/images/{name}") {
+        get("images/{name}") {
             val name = call.parameters["name"] ?: return@get call.respond(HttpStatusCode.BadRequest)
             val file = File("resources/images/$name")
             if (!file.exists()) {
@@ -26,13 +64,14 @@ fun Application.configureRouting() {
         }
 
         get("user/profile") {
-            val data = UserProfile(
+            val data = UserProfileModel(
                 "Yurii",
                 "Sika",
-                28,
+                "28",
                 "Male",
                 "+380967927303",
-                "yrasika80@gmail.com")
+                "yrasika80@gmail.com"
+            )
 
             call.respond(data)
         }
@@ -48,16 +87,16 @@ fun Application.configureRouting() {
         get("affirmations") {
             try {
                 val affirmationData = listOf(
-                    AffirmationData(1, "You are capable of amazing things."),
-                    AffirmationData(2, "Believe in yourself and all that you are."),
-                    AffirmationData(3, "Every day is a new opportunity to grow."),
-                    AffirmationData(4, "You have the power to create change."),
-                    AffirmationData(5, "Mistakes are proof that you are trying."),
-                    AffirmationData(6, "Your potential is limitless."),
-                    AffirmationData(7, "Stay positive, work hard, and make it happen."),
-                    AffirmationData(8, "You are stronger than your fears."),
-                    AffirmationData(9, "Progress, not perfection, is the goal."),
-                    AffirmationData(10, "Embrace the journey and trust the process.")
+                    AffirmationModel(1, "You are capable of amazing things."),
+                    AffirmationModel(2, "Believe in yourself and all that you are."),
+                    AffirmationModel(3, "Every day is a new opportunity to grow."),
+                    AffirmationModel(4, "You have the power to create change."),
+                    AffirmationModel(5, "Mistakes are proof that you are trying."),
+                    AffirmationModel(6, "Your potential is limitless."),
+                    AffirmationModel(7, "Stay positive, work hard, and make it happen."),
+                    AffirmationModel(8, "You are stronger than your fears."),
+                    AffirmationModel(9, "Progress, not perfection, is the goal."),
+                    AffirmationModel(10, "Embrace the journey and trust the process.")
                 )
 
                 call.respond(affirmationData)
@@ -95,7 +134,7 @@ fun Application.configureRouting() {
                 }
 
                 val notifications = (1..100).map { id ->
-                    NotificationData(
+                    NotificationModel(
                         id = id,
                         title = sampleTitles.random(),
                         message = sampleMessages.random(),

@@ -1,12 +1,12 @@
-package com.app
+package com.app.data
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserProfile(
+data class UserProfileModel(
     val firstName: String,
-    val latestName: String,
-    val age: Int,
+    val lastName: String,
+    val age: String,
     val gender: String,
     val phoneNumber: String,
     val email: String

@@ -3,7 +3,7 @@ package com.app.data
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NotificationData(
+data class NotificationModel(
     val id: Int,
     val title: String,
     val message: String,
