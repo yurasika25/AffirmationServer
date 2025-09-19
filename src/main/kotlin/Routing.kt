@@ -80,24 +80,6 @@ fun Application.configureRouting() {
             call.respondText("Every day is a new opportunity to grow.")
         }
 
-        get("/check-platform") {
-            val userAgent = call.request.headers["User-Agent"] ?: ""
-
-            val platform = when {
-                userAgent.contains("Android", ignoreCase = true) -> "Android"
-                userAgent.contains("iPhone", ignoreCase = true) ||
-                        userAgent.contains("iPad", ignoreCase = true) ||
-                        userAgent.contains("iOS", ignoreCase = true) -> "iOS"
-                userAgent.contains("Windows", ignoreCase = true) ||
-                        userAgent.contains("Macintosh", ignoreCase = true) ||
-                        userAgent.contains("Linux", ignoreCase = true) ||
-                        userAgent.contains("X11", ignoreCase = true) -> "Web"
-                else -> "Unknown"
-            }
-
-            call.respond(HttpStatusCode.OK, mapOf("platform" to platform))
-        }
-
         get("/health") { call.respondText("OK") }
 
         get("user/status") {
