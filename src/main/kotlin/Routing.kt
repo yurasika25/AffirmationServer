@@ -80,6 +80,8 @@ fun Application.configureRouting() {
             call.respondText("Every day is a new opportunity to grow.")
         }
 
+        get("/health") { call.respondText("OK") }
+
         get("user/status") {
             call.respondText("Enabled")
         }
