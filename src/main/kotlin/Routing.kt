@@ -67,7 +67,7 @@ fun Application.configureRouting() {
             val data = UserProfileModel(
                 "Yurii",
                 "Sika",
-                "28",
+                "29",
                 "Male",
                 "+380967927303",
                 "yrasika80@gmail.com"
