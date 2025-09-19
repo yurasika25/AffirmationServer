@@ -1,9 +1,9 @@
 package com.app
 
-import com.app.data.AffirmationModel
-import com.app.data.NotificationModel
-import com.app.data.PostData
-import com.app.data.UserProfileModel
+import data.AffirmationModel
+import data.NotificationModel
+import data.PostData
+import data.UserProfileModel
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
 import io.ktor.server.request.receive

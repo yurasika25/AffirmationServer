@@ -1,15 +1,12 @@
-import io.ktor.server.application.*
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
+package com.app
 
-fun main() {
-    embeddedServer(
-        Netty,
-        host = "0.0.0.0",
-        port = System.getenv("PORT")?.toInt() ?: 8080
-    ) {
-        module()
-    }.start(wait = true)
+import configureHTTP
+import configureMonitoring
+import configureSerialization
+import io.ktor.server.application.*
+
+fun main(args: Array<String>) {
+    io.ktor.server.netty.EngineMain.main(args)
 }
 
 fun Application.module() {
